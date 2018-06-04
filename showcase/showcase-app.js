@@ -100,4 +100,7 @@ App.propTypes = {
   forExample: PropTypes.bool
 };
 
-export default App;
+import Study from './study'
+
+export default Study;
+// export default App;
