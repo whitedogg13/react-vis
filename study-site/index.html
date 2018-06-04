@@ -1,0 +1,283 @@
+<html>
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <script src="https://unpkg.com/react@15.4.2/dist/react.js"></script>
+        <script src="https://unpkg.com/react-dom@15.4.2/dist/react-dom.js"></script>
+        <script src="https://unpkg.com/react-vis@1.9.4/dist/dist.min.js"></script>
+        <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+        <!-- <link rel="stylesheet" type="text/css" href="https://s3-us-west-2.amazonaws.com/s.cdpn.io/258531/react-vis.css"> -->
+        <link rel="stylesheet" type="text/css" href="https://unpkg.com/react-vis@1.9.4/dist/style.css">
+    </head>
+    <body>
+        <div id="root"/>
+    </body>
+    <script type="text/babel">
+        const Component = React.Component;
+        const {
+          XYPlot,
+          XAxis,
+          YAxis,
+          VerticalGridLines,
+          HorizontalGridLines,
+          VerticalBarSeries,
+          VerticalBarSeriesCanvas,
+          VerticalRectSeries,
+          MarkSeries,
+          LineSeries,
+        } = reactVis; 
+
+const jsonData = {
+    "chart": {
+        "type": "block"
+    },
+    "title": {
+        "text": "E30+3ST"
+    },
+    "subtitle": {
+        "text": "訓練說明"
+    },
+    "xMin": 0,
+    "xMax": 100,
+    "yMin": 0,
+    "yMax": 100,
+    "yAxis": {
+        "text": "HRR心率(%)",
+        "tickInterval": 20
+    },
+    "xAxis": {
+        "text": "時間(分鐘)",
+        "tickInterval": 10
+    },
+    "series": {
+        "data": [{
+            "xStart": 0,
+            "xEnd": 10,
+            "yStart": 59,
+            "yEnd": 74,
+            "color": "#5555FF"
+        }, {
+            "xStart": 10,
+            "xEnd": 20,
+            "yStart": 59,
+            "yEnd": 74,
+            "color": "#5555FF"
+        }, {
+            "xStart": 20,
+            "xEnd": 30,
+            "yStart": 40,
+            "yEnd": 50,
+            "color": "#5555FF"
+        }, {
+            "xStart": 30,
+            "xEnd": 40,
+            "yStart": 60,
+            "yEnd": 80,
+            "color": "#5555FF"
+        }, {
+            "xStart": 40,
+            "xEnd": 50,
+            "yStart": 70,
+            "yEnd": 90,
+            "color": "#5555FF",
+        }]
+    }
+};
+
+        function getData() {
+            return {
+                "chart": {
+                    "type": "block"
+                },
+                "title": {
+                    "text": "E30+3ST"
+                },
+                "subtitle": {
+                    "text": "訓練說明"
+                },
+                "xMin": 0,
+                "xMax": 100,
+                "yMin": 0,
+                "yMax": 100,
+                "yAxis": {
+                    "text": "HRR心率(%)",
+                    "tickInterval": 20
+                },
+                "xAxis": {
+                    "text": "時間(分鐘)",
+                    "tickInterval": 10
+                },
+                "series": {
+                    "data": [{
+                        "xStart": 0,
+                        "xEnd": 10,
+                        "yStart": 59,
+                        "yEnd": 74,
+                        "color": "#5555FF"
+                    }, {
+                        "xStart": 10,
+                        "xEnd": 20,
+                        "yStart": 25,
+                        "yEnd": 45,
+                        "color": "#5555FF"
+                    }, {
+                        "xStart": 20,
+                        "xEnd": 30,
+                        "yStart": 40,
+                        "yEnd": 50,
+                        "color": "#5555FF"
+                    }, {
+                        "xStart": 30,
+                        "xEnd": 40,
+                        "yStart": 60,
+                        "yEnd": 80,
+                        "color": "#5555FF"
+                    }, {
+                        "xStart": 40,
+                        "xEnd": 50,
+                        "yStart": 70,
+                        "yEnd": 90,
+                        "color": "#5555FF",
+                    }]
+                }
+            }
+        }
+
+        class App extends Component {
+            render() {
+                let chartInfo = getData();
+                let rectData = chartInfo.series.data.map(
+                    cell => {
+                        return {
+                            x0: cell.xStart,
+                            x: cell.xEnd,
+                            y0: cell.yStart,
+                            y: cell.yEnd,
+                        }
+                    }
+                );
+
+                let lineData = chartInfo.series.data.map(
+                    cell => {
+                        return {
+                            x: (cell.xStart + cell.xEnd) / 2,
+                            y: (cell.yStart + cell.yEnd) / 2,
+                        }
+                    }
+                );
+
+                return (
+                    <div style={{margin: '0 auto', width: 300}}>
+                        <XYPlot
+                            xDomain={[0, 100]}
+                            yDomain={[0, 100]}
+                            width={300}
+                            height={300}
+                        >
+                            <VerticalGridLines />
+                            <HorizontalGridLines />
+                            <XAxis />
+                            <YAxis />
+                            <VerticalRectSeries 
+                                stroke="red"
+                                data={rectData}
+                            />                    
+                            <LineSeries
+                                data={lineData}
+                            />
+                        </XYPlot>
+                    </div>
+                )
+            }
+        }
+
+        class Study extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            index: null
+        }
+    }
+
+    render() {
+        let chartInfo = jsonData;
+        let rectData = chartInfo.series.data.map(
+            cell => {
+                return {
+                    x0: cell.xStart,
+                    x: cell.xEnd,
+                    y0: cell.yStart,
+                    y: cell.yEnd,
+                }
+            }
+        );
+
+        let lineData = chartInfo.series.data.map(
+            cell => {
+                return {
+                    x: (cell.xStart + cell.xEnd) / 2,
+                    y: (cell.yStart + cell.yEnd) / 2,
+                }
+            }
+        );
+
+        let {index} = this.state;
+
+        return (
+            <div>
+                <XYPlot
+                    xDomain={[chartInfo.xMin, chartInfo.xMax]}
+                    yDomain={[chartInfo.yMin, chartInfo.yMax]}
+                    width={300}
+                    height={300}
+                >
+                    <VerticalGridLines />
+                    <HorizontalGridLines />
+                    <XAxis />
+                    <YAxis />
+
+                    <VerticalRectSeries 
+                        stroke={index === "red"}
+                        data={rectData}
+                    />                    
+                    <LineSeries
+                        data={lineData}
+                        onNearestX={this._onNearestX}
+                    />
+
+                    {
+                        index !== null && (
+                            <LineSeries
+                                data={[
+                                    {x: lineData[index].x, y: chartInfo.yMin},
+                                    {x: lineData[index].x, y: chartInfo.yMax}
+                                ]}
+                            />
+                        )
+                    }
+
+                    <MarkSeries
+                      data={lineData}
+                      onValueClick={
+                          e => console.log(e)
+                      }
+                    />
+                </XYPlot>
+            </div>
+        );
+    }
+
+    _onNearestX = (_, {index}) => {
+        console.log(index);
+        this.setState({index});
+    }
+}
+
+        const app = <App />
+        const study = <Study />
+
+        ReactDOM.render(
+            <Study />,
+            document.getElementById('root'),
+        );
+    </script>
+</html>
